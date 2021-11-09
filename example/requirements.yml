@@ -1,0 +1,5 @@
+---
+- name: toucan
+  src: "git@github.com:fionn/toucan.git"
+  version: "refactor"
+  scm: "git"

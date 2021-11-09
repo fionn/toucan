@@ -1,0 +1,11 @@
+---
+galaxy_info:
+  role_name: toucan
+  author: "FF"
+  description: "Deploy canary tokens"
+  version: "0.0.1"
+  min_ansible_version: "2.9"
+  platforms:
+    - name: GenericUNIX
+      versions: all
+dependencies: []

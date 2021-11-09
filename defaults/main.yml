@@ -1,0 +1,6 @@
+---
+persistent: true
+fail: false
+mode: 0644
+metadata_path: "{{ ansible_env.HOME }}/.toucan_metadata"
+destroy_only: false

@@ -1,0 +1,49 @@
+- name: Get old token ID
+  slurp:
+    src: "{{ metadata_path }}"
+  register: old_token
+  ignore_errors: yes
+
+- debug:
+    msg: "Found token {{ old_token.content | b64decode }}"
+    verbosity: 1
+  when: old_token.content is defined
+
+- name: Generate tokens
+  delegate_to: localhost
+  canarytoken:
+    destroy_only: "{{ destroy_only }}"
+    old_token: "{{ old_token }}"
+    console:
+      domain: "{{ console.domain }}"
+      api_token: "{{ console.api_token }}"
+    persistent: "{{ persistent }}"
+    fail: "{{ fail }}"
+    token: "{{ token }}"
+  register: result
+
+- name: Ensure destination path
+  file:
+    path: "{{ dest | dirname }}"
+    state: directory
+  when: not destroy_only
+
+- name: Deploy tokens
+  copy:
+    content: "{{ result.token.object }}"
+    dest: "{{ dest }}"
+    mode: "{{ mode }}"
+  when: not destroy_only
+
+- name: Ensure metadata path
+  file:
+    path: "{{ metadata_path | dirname }}"
+    state: directory
+  when: persistent is true and not destroy_only
+
+- name: Write metadata
+  copy:
+    content: "{{ result.token.id }}"
+    dest: "{{ metadata_path }}"
+    mode: 0600
+  when: persistent is true and not destroy_only
