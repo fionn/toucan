@@ -1,2 +1,2 @@
 canarytools == 1.0.15
-requests == 2.24.0
+requests == 2.31.0
